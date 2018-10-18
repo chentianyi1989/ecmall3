@@ -1,0 +1,31 @@
+<div class="app-container with-navbar" ng-controller="RecommendedShopsController">
+  <div class="navbar fixed-top">
+    <div class="navbar-left hide-weixin" ng-click="goBack()">
+      <img class="button-icon" ng-src="image/nav-left.png" />
+      <div class="button-text">返回</div>
+    </div>
+    <div class="navbar-title">
+      推荐店铺
+    </div>
+  </div>
+  <div class="recommended-shops" ng-if="recommendShops && recommendShops.length">
+    <div class="shops-content" ng-repeat="recommendShop in recommendShops track by $index">
+      <div class="content-item" ng-click="touchShop(recommendShop)">
+        <div class="item-img">
+          <img ng-src="image/default-photo.png" lazy-img="{{recommendShop.logo.large}}" />
+        </div>
+        <div class="item-title">
+          {{recommendShop.name}}
+        </div>
+        <div class="item-star">
+          <div class="star-gray">
+            <img ng-repeat="i in range(1,5)" src="image/star_gray@2x.png" alt="">
+          </div>
+          <div class="star-gold">
+            <img ng-repeat="i in range(1,recommendShop.credit)" src="image/star_gold@2x.png" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

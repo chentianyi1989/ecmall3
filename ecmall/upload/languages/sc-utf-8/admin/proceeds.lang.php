@@ -1,0 +1,31 @@
+<?php
+
+return array(
+    'proceeds_manage'  => '平台统一收款单',
+    'no_such_log'  => '没有指定的单据',
+    'seller_name'  => '卖家名称',
+    'buyer_name'  => '买家名称',
+    'payment_name'  => '支付方式',
+    'order_sn'  => '订单号',
+    'pay_time'  => '支付时间',
+    'order_amount'  => '订单总价',
+    'goods_amount'  => '商品总价',
+    'money'  => '支付金额',
+    'out_trade_sn'  => '外部交易号',
+    'discount'  => '折扣',
+    'pay_time_from' => '下单时间从',
+    'pay_time_to' => '至',
+    'money_from' => '支付金额从',
+    'money_to' => '至',
+    'proceeds_status'  => '支付状态',
+    'payment_name'  => '支付方式',
+    'pay_message'  => '支付留言 ',
+    'balance' => '卖家当前余额',
+    'type' => '支付类型',
+    'income' => '收入',
+    'expenses' => '支出',
+    'modify' => '修改',
+    'pay_message' => '支付备注',
+    'export' => '导出',
+);
+?>

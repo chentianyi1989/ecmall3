@@ -1,0 +1,108 @@
+<div class="app-container with-navbar with-tabbar" ng-controller="MyFavoriteController">
+
+    <div class="navbar fixed-top">
+        <div class="navbar-left hide-weixin" ng-click="goBack()">
+            <img class="button-icon" src="image/nav-left.png"/>
+            <div class="button-text">返回</div>
+        </div>
+        <div class="navbar-title">
+            我的收藏
+        </div>
+        <div class="navbar-right">
+        </div>
+    </div>
+
+    <!-- Favorite -->
+    <div class="app-content" infinite-scroll='showProductList ?myFavoriteModel.loadMoreProduct() : myFavoriteModel.loadMoreShop()'>
+        <div class="header-common" ng-if="isB2B2C">
+            <div class="{{showProductList?'header-item item-color': 'header-item'}}" ng-click="touchProductType()" >商品</div>
+            <div class="{{showShopList?'header-item item-color': 'header-item'}}" ng-click="touchShopType()">店铺</div>
+        </div>
+      <!--store-->
+        <div class="store-list" ng-if="myFavoriteModel.shops && myFavoriteModel.shops.length && showShopList">
+            <div class="list-item" ng-repeat="shop in myFavoriteModel.shops track by $index">
+                <div class="item-photo" ng-click="touchShop(shop)">
+                    <img src="{{shop.logo.large || 'image/Group 19.png'}}"/>
+                </div>
+                <div class="item-info">
+                    <div class="info-delete" >
+                        <img src="image/ind-delete.png" ng-click="touchShopDelete(shop)">
+                    </div>
+                    <div class="info-name">
+                       <span>{{shop.name}}</span>
+                      <img src="image/z@3x.png" alt=""/>
+                    </div>
+                    <div class="info-star" >
+                        <div class="star-count"  >
+                            <img src="image/e8_star @2x.png" alt="" ng-repeat="i in range(1, shop.credit) track by $index"/>
+                        </div>
+                    </div>
+                    <div class="info-address">
+                        <span>{{shop.address}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+      <!-- / store-->
+
+      <!--goods-->
+        <div class="favorite-list" ng-if="myFavoriteModel.products && myFavoriteModel.products.length && showProductList">
+            <div class="list-item" ng-repeat="product in myFavoriteModel.products track by $index">
+                <div class="item-photo" ng-click="touchProduct(product)">
+                    <img ng-src="{{product.default_photo.large}}"/>
+                </div>
+                <div class="item-info">
+                    <div class="info-delete" ng-click="touchProductDelete(product)">
+                        <img src="image/ind-delete.png">
+                    </div>
+                    <div class="info-name">
+                        {{product.name}}
+                    </div>
+                    <div class="info-attr" >
+                        <div class="info-text">
+                            销量：{{product.sales_count}}&nbsp;&nbsp;库存：{{product.good_stock}}
+                        </div>
+                    </div>
+                    <div class="info-price">
+                        <span class="price-shop">￥{{product.current_price|number:2}}</span>
+                        <span class="price-market">￥{{product.price|number:2}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+      <!-- / goods-->
+
+        <div class="empty" ng-if="myFavoriteModel.isProductEmpty && showProductList">
+            <div class="empty-item">
+                <img class="item-logo" ng-src="image/logo-favorite-empty.png"/>
+                <div class="item-text">您暂时还未收藏过任何商品</div>
+            </div>
+        </div>
+
+        <div class="loading-more" ng-if="myFavoriteModel.isProductLoaded && myFavoriteModel.isProductLoading && showProductList">
+            正在加载...
+        </div>
+        <div class="loading-more" ng-if="myFavoriteModel.isProductLoaded && myFavoriteModel.isProductLastPage && showProductList">
+            全部加载完毕
+        </div>
+
+      <!--shops-->
+      <div class="empty" ng-if="myFavoriteModel.isShopEmpty && showShopList">
+        <div class="empty-item">
+          <img class="item-logo" ng-src="image/logo-favorite-empty.png"/>
+          <div class="item-text">您暂时还未收藏过任何店铺</div>
+        </div>
+      </div>
+
+      <div class="loading-more" ng-if="myFavoriteModel.isShopLoaded && myFavoriteModel.isShopLoading && showShopList">
+        正在加载...
+      </div>
+      <div class="loading-more" ng-if="myFavoriteModel.isShopLoaded && myFavoriteModel.isShopLastPage && showShopList">
+        全部加载完毕
+      </div>
+
+
+
+    </div>
+
+</div>

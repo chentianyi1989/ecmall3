@@ -1,0 +1,199 @@
+{include file="header.html"}
+<script type="text/javascript">
+$(function(){
+    $('#unionpay_form').validate({
+        errorPlacement: function(error, element){
+            $(element).next('.field_notice').hide();
+            $(element).after(error);
+        },
+        success       : function(label){
+            label.addClass('right').text('OK!');
+        },
+        onkeyup    : false,
+        rules : {
+            cert : {
+                required : true,
+                accept : "pfx"
+            },
+        },
+        messages : {
+            cert : {
+                required : '{$lang.cert_empty}',
+                accept : '{$lang.select_valid_image}'
+            },
+        }
+    });
+});
+</script>
+<div id="rightTop">
+    <p>{$lang.appsetting}</p>
+    <ul class="subnav">
+        <li><span>{$lang.appPayment}</span></li>
+        <li><a class="btn1" href="index.php?app=appsetting&amp;act=appSocial">{$lang.appSocial}</a></li>
+        <li><a class="btn1" href="index.php?app=appsetting&amp;act=appLeancloud">{$lang.appLeancloud}</a></li>
+    </ul>
+</div>
+{foreach from=$settings key=key item=setting name="setting_group"}
+{if $key == 'alipay.app'}
+<div class="info">
+    <form method="post">
+        <table class="infoTable">
+            <tr style="background-color: #F3F8F8; height: 40px;">
+                <th colspan="2" align="left" style="padding-left: 5px;">
+                    {$lang.alipay_app_instruction}<font size="2"><a href="{$setting.url}" target="_blank"><span style="background-color: #3d6bac; border-radius: 3px;color: white;padding-left: 5px;padding-right: 8px">{$lang.visit_website}</span></a></font></th>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.status}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    {html_radios name="config[status]" options=$yes_or_no checked=$setting.status}
+                <!-- <span class="grey">{$lang.status}</span> -->
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.partner_id}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput" id="partner_id" type="text" name="config[partner_id]" value="{$setting.partner_id}"/>
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.seller_id}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput" id="seller_id" type="text" name="config[seller_id]" value="{$setting.seller_id}"/>
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.private_key}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput" id="private_key" type="text" name="config[private_key]" value="{$setting.private_key}"/>
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.public_key}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput" id="public_key" type="text" name="config[public_key]" value="{$setting.public_key}"/>
+                </td>
+            </tr>
+            <tr><input class="infoTableInput" id="code" type="hidden" name="code" value="{$key}"/></tr>
+            <tr>
+            <th></th>
+            <td class="ptb20">
+                <input class="formbtn" type="submit" name="Submit" value="{$lang.submit}" />
+                <input class="formbtn" type="reset" name="Submit2" value="{$lang.reset}" />
+            </td>
+        </tr>
+        </table>
+    </form>
+</div>
+{/if}
+{if $key == 'wxpay.app'}
+<div class="info">
+    <form method="post">
+        <table class="infoTable">
+            <tr style="background-color: #F3F8F8; height: 40px;">
+                <th colspan="2" align="left" style="padding-left: 5px;">
+                    {$lang.wxpay_app_instruction}<font size="2"><a href="{$setting.url}" target="_blank"><span style="background-color: #3d6bac; border-radius: 3px;color: white;padding-left: 5px;padding-right: 8px">{$lang.visit_website}</span></a></font></th>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.status}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    {html_radios name="config[status]" options=$yes_or_no checked=$setting.status}
+                <!-- <span class="grey">{$lang.status}</span> -->
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.app_id}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput" id="app_id" type="text" name="config[app_id]" value="{$setting.app_id}"/>
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.app_secret}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput" id="app_secret" type="text" name="config[app_secret]" value="{$setting.app_secret}"/>
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.mch_id}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput" id="mch_id" type="text" name="config[mch_id]" value="{$setting.mch_id}"/>
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.mch_key}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput" id="mch_key" type="text" name="config[mch_key]" value="{$setting.mch_key}"/>
+                </td>
+            </tr>
+            <tr><input class="infoTableInput" id="code" type="hidden" name="code" value="{$key}"/></tr>
+            <tr>
+            <th></th>
+            <td class="ptb20">
+                <input class="formbtn" type="submit" name="Submit" value="{$lang.submit}" />
+                <input class="formbtn" type="reset" name="Submit2" value="{$lang.reset}" />
+            </td>
+        </tr>
+        </table>
+    </form>
+</div>
+{/if}
+{if $key == 'unionpay.app'}
+<div class="info">
+    <form method="post" enctype="multipart/form-data" id="unionpay_form">
+        <table class="infoTable">
+            <tr style="background-color: #F3F8F8; height: 40px;">
+                <th colspan="2" align="left" style="padding-left: 5px;">
+                    {$lang.unionpay_app_instruction}<font size="2"><a href="{$setting.url}" target="_blank"><span style="background-color: #3d6bac; border-radius: 3px;color: white;padding-left: 5px;padding-right: 8px">{$lang.visit_website}</span></a></font></th>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.status}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    {html_radios name="config[status]" options=$yes_or_no checked=$setting.status}
+                <!-- <span class="grey">{$lang.status}</span> -->
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.mer_id}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput" id="mer_id" type="text" name="config[mer_id]" value="{$setting.mer_id}"/>
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.cert}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableFile2" id="cert" type="file" name="cert" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.cert_pwd}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput" id="cert_pwd" type="text" name="config[cert_pwd]" value="{$setting.cert_pwd}"/>
+                </td>
+            </tr>
+            <tr><input class="infoTableInput" id="code" type="hidden" name="code" value="{$key}"/></tr>
+            <tr>
+            <th></th>
+            <td class="ptb20">
+                <input class="formbtn" type="submit" name="Submit" value="{$lang.submit}" />
+                <input class="formbtn" type="reset" name="Submit2" value="{$lang.reset}" />
+            </td>
+        </tr>
+        </table>
+    </form>
+</div>
+{/if}
+{/foreach}
+{include file="footer.html"}

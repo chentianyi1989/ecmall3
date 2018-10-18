@@ -1,0 +1,135 @@
+<div class="container" ng-controller="ShopHomeController">
+
+  <div class="navbar fixed-top">
+    <div class="navbar-left hide-weixin" ng-click="goBack()">
+        <img class="button-icon" src="image/nav-left.png"/>
+    </div>
+    <div class="search-inline search-inline-add">
+      <img class="search-icon" src="image/ind-search.png">
+      <form  class="ng-pristine ng-valid" ng-submit="touchSearch()">
+        <input class="search-text ng-pristine ng-untouched ng-valid ng-empty"  placeholder="店内搜索" aria-invalid="false" ng-model="currentKeyword">
+      </form>
+    </div>
+    <div class="search-cancel search-icon" ng-click="touchShopCategory()" role="button" tabindex="0">
+      <img src="image/c2_store_sort@2x.png" alt=""/>
+    </div>
+  </div>
+
+  <div class="app-content">
+      <div class="brand">
+          <div class="brand-banner">
+              <div class="banner-phone">
+                  <img ng-src="image/b2_store_big.png" lazy-img="{{shop.banner.large}}"/>
+              </div>
+              <div class="banner-shade">
+                  <div class="shade-inner">
+                      <div class="inner-photo" ng-click="touchDetails()">
+                      	<img ng-src="image/b2_store_big.png" lazy-img="{{shop.logo.thumb}}"/>
+                      </div>
+                      <div class="inner-title">
+                        <div class="title-name">{{shop.name || '-'}}</div>
+                        <div class="title-attention">{{shop.watcher_count || '0'}}人收藏</div>
+                      </div>
+                      <div class="inner-favorite">
+                          <div class="favorite-box" ng-click="touchCallTel()">
+                            <div class="box-bg">
+                              <img src="image/f0_phone@2x.png" alt=""/>
+                            </div>
+                            <span>联系</span>
+                          </div>
+                          <div class="favorite-box favorite-style" ng-click="touchLike()">
+                            <div class="box-bg">
+                             <img src="image/f0_heart@2x.png" ng-if="!shop.is_watching"/>
+                            <img src="image/b2-like@2x.png" ng-if="shop.is_watching"/>
+                            </div>
+                            <span>{{shop.is_watching?"已收藏":"收藏"}}</span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <ul class="brand-type">
+            <li class="" ng-click="touchShopNewProduct()">
+              <img src="image/Group7@2x.png" alt=""/>
+              <br/>
+              <span>最新商品</span>
+            </li>
+            <li class="" ng-click="touchShopAllProduct()">
+              <img src="image/Group7_Copy@2x.png" alt=""/>
+              <br/>
+              <span>全部商品</span>
+            </li>
+            <li class="" ng-click="touchShopHotProduct()">
+              <img src="image/Group7_Copy_2@2x.png" alt=""/>
+              <br/>
+              <span>热销商品</span>
+            </li>
+          </ul>
+
+          <div class="goods">
+            <div class="good-title" ng-click="touchRecommendProduct()" ng-if='recommendProducts.length'>
+              <div class="title-text">推荐商品</div>
+              <div class="title-more">
+                <span>查看更多</span>
+                <img src="image/nav-right.png" alt=""/>
+              </div>
+            </div>
+            <div class="goods-show">
+              <dl ng-repeat="recommendProduct in recommendProducts track by $index" ng-click="touchProduct(recommendProduct)">
+                <dt>
+                  <img ng-src="image/default-photo.png" lazy-img="{{recommendProduct.photos[0].large}}"/>
+                </dt>
+                <dd>
+                  <div class="show-title line-clamp">{{recommendProduct.name || '-'}}</div>
+                  <div class="show-price">
+                    <div class="price">￥<span>{{recommendProduct.current_price || '0.00'}}</span></div>
+                    <div class="count">
+                      <span>{{recommendProduct.sales_count || '-'}}</span>人付款
+                    </div>
+                  </div>
+                </dd>
+              </dl>
+            </div>
+
+            <div class="good-title" ng-click="touchShopNewProduct()" ng-if='newProducts.length'>
+              <div class="title-text">最新商品</div>
+              <div class="title-more">
+                <span>查看更多</span>
+                <img src="image/nav-right.png" alt=""/>
+              </div>
+            </div>
+
+            <div class="goods-show">
+              <dl ng-repeat="newProduct in newProducts track by $index" ng-click="touchProduct(newProduct)">
+                <dt>
+                  <img ng-src="image/default-photo.png" lazy-img="{{newProduct.photos[0].large}}"/>
+                </dt>
+                <dd>
+                  <div class="show-title line-clamp">{{newProduct.name || '-'}}</div>
+                  <div class="show-price">
+                    <div class="price">￥<span>{{newProduct.current_price || '0.00'}}</span></div>
+                    <div class="count">
+                      <span>{{newProduct.sales_count || '-'}}</span>人付款
+                    </div>
+                  </div>
+                </dd>
+              </dl>
+            </div>
+          </div>
+      </div>
+  </div>
+
+  <!--Call-->
+  <div class="dialog-call" ng-if="showTel">
+      <div class="call-mask"></div>
+      <div class="call-panel">
+          <h1 class="panel-title">拨打电话</h1>
+          <h2 class="panel-number">{{shop.tel}}</h2>
+        <ul class="panel-button">
+          <li ng-click="touchTelCanel()">取消</li>
+          <li ng-click="touchTelSure()">确认</li>
+        </ul>
+      </div>
+  </div>
+</div>

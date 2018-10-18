@@ -1,0 +1,92 @@
+{include file="header.html"}
+<script type="text/javascript">
+$(function(){
+    $('#created_at_from').datepicker({dateFormat: 'yy-mm-dd'});
+    $('#created_at_to').datepicker({dateFormat: 'yy-mm-dd'});
+});
+</script>
+<style type="text/css">
+    table {table-layout: fixed; word-break: break-all;}
+    .dataTable td{text-align: center;}
+</style>
+<div id="rightTop">
+    <p>{$lang.leancloud_manage}</p>
+    <ul class="subnav">
+        <li><span>{$lang.manage}</span></li>
+        <li><a class="btn1" href="index.php?app=leancloud&amp;act=add">{$lang.create}</a></li>
+    </ul>
+</div>
+<div class="mrightTop">
+    <div class="fontl">
+        <form method="get">
+             <div class="left">
+                <input type="hidden" name="app" value="leancloud" />
+                <input type="hidden" name="act" value="index" />
+                <select class="querySelect" name="platform">
+                    <option value="">{$lang.platform}</option>
+                    {html_options options=$platform selected=$query.platform}
+                </select>
+                <select class="querySelect" name="status">
+                    <option value="">{$lang.status}</option>
+                    {html_options options=$status selected=$query.status}
+                </select>
+                {$lang.created_at_from}:<input class="queryInput2" type="text" value="{$query.created_at_from}" id="created_at_from" name="created_at_from" class="pick_date" />
+                {$lang.created_at_to}:<input class="queryInput2" type="text" value="{$query.created_at_to}" id="created_at_to" name="created_at_to" class="pick_date" />
+                {$lang.title}:<input class="queryInput" type="text" name="title" value="{$query.title|escape}" />
+                <input type="submit" class="formbtn" value="{$lang.query}" />
+            </div>
+            <!--{if $filtered}-->
+            <a class="left formbtn1" href="index.php?app=leancloud">{$lang.cancel_query}</a>
+            <!--{/if}-->
+        </form>
+    </div>
+    <div class="fontr">
+        {if $leanclouds}{include file=page.top.html}{/if}
+    </div>
+</div>
+<div class="tdare">
+    <table width="100%" cellspacing="0" class="dataTable">
+        <!--{if $leanclouds}-->
+        <tr class="tatr1">
+            <td width="5%" class="firstCell"><input type="checkbox" class="checkall" /></td>
+            <td width="5%"><span ectype="order_by" fieldname="id">{$lang.id}</span></td>
+            <td width="15%"><span fieldname="title">{$lang.title}</span></td>
+            <td width="15%"><span fieldname="link">{$lang.link}</span></td>
+            <td width="10%"><span ectype="order_by" fieldname="platform">{$lang.platform}</span></td>
+            <td width="10%"><span ectype="order_by" fieldname="status">{$lang.status}</span></td>
+            <td width="15%"><span ectype="order_by" fieldname="created_at">{$lang.created_at}</span></td>
+            <td width="10%"><span ectype="order_by" fieldname="push_at">{$lang.push_at}</span></td>
+            <td >{$lang.handler}</span></td>
+        </tr>
+        <!--{/if}-->
+        <!--{foreach from=$leanclouds item=leancloud}-->
+        <tr class="tatr2">
+            <td class="firstCell"><input type="checkbox" class="checkitem" value="{$leancloud.id}"/></td>
+            <td>{$leancloud.id}</td>
+            <td>{$leancloud.title|escape}</td>
+            <td>{$leancloud.link|link}</td>
+            <td>{$leancloud.platform|modifier:platform_translator}</td>
+            <td>{if $leancloud.status == 1}{$lang.sent}{else}{$lang.waiting}{/if}</td>
+            <td>{$leancloud.created_at}</td>
+            <td>{$leancloud.push_at}</td>
+            <td class="handler">
+            {if $leancloud.status != 1}<a href="index.php?app=leancloud&amp;act=edit&amp;id={$leancloud.id}">{$lang.edit}</a>  |{/if} <a href="index.php?app=leancloud&amp;act=rePush&amp;id={$leancloud.id}">{$lang.repush}</a>  |  <a name="drop" href="javascript:drop_confirm('{$lang.drop_confirm}', 'index.php?app=leancloud&amp;act=drop&amp;id={$leancloud.id}');">{$lang.drop}</a>
+            </td>
+        </tr>
+        <!--{foreachelse}-->
+        <tr class="no_data">
+            <td colspan="7">{$lang.no_data}</td>
+        </tr>
+        <!--{/foreach}-->
+    </table>
+    <div id="dataFuncs">
+        <div id="batchAction" class="left paddingT15">
+        <input class="formbtn batchButton" type="button" value="{$lang.drop}" name="id" uri="index.php?app=leancloud&act=drop&ret_page={$page_info.curr_page}" presubmit="confirm('{$lang.batch_drop_confirm}')"/>
+        </div>
+        <div class="pageLinks">
+            {if $leanclouds}{include file=page.bottom.html}{/if}
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+{include file="footer.html"}

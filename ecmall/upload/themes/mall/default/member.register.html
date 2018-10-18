@@ -1,0 +1,275 @@
+{include file="header.html"}
+<script type="text/javascript">
+//注册表单验证
+$(function(){
+    $('#register_form').validate({
+        errorPlacement: function(error, element){
+            var error_td = element.parent('td').next('td');
+            error_td.find('.field_notice').hide();
+            error_td.append(error);
+        },
+        success       : function(label){
+            label.addClass('validate_right').text('OK!');
+        },
+        onkeyup: false,
+        rules : {
+            user_name : {
+                required : true,
+                byteRange: [3,15,'{$charset}'],
+                remote   : {
+                    url :'index.php?app=member&act=check_user&ajax=1',
+                    type:'get',
+                    data:{
+                        user_name : function(){
+                            return $('#user_name').val();
+                        }
+                    },
+                    beforeSend:function(){
+                        var _checking = $('#checking_user');
+                        _checking.prev('.field_notice').hide();
+                        _checking.next('label').hide();
+                        $(_checking).show();
+                    },
+                    complete :function(){
+                        $('#checking_user').hide();
+                    }
+                }
+            },
+            password : {
+                required : true,
+                minlength: 6
+            },
+            password_confirm : {
+                required : true,
+                equalTo  : '#password'
+            },
+            email : {
+                required : true,
+                email    : true
+            },
+            captcha : {
+                required : true,
+                remote   : {
+                    url : 'index.php?app=captcha&act=check_captcha',
+                    type: 'get',
+                    data:{
+                        captcha : function(){
+                            return $('#captcha1').val();
+                        }
+                    }
+                }
+            },
+            sms_vcode : {
+                required : true,
+                remote   : {
+                    url : 'index.php?app=member&act=ajax_validate_sms_code',
+                    type: 'get',
+                    data:{
+                        sms_vcode : function(){
+                            return $('#sms_vcode').val();
+                        },
+                        phone : function(){
+                            return $('#user_name').val();
+                        }
+                    }
+                }
+            },
+            agree : {
+                required : true
+            }
+        },
+        messages : {
+            user_name : {
+                required : '{$lang.user_name_required}',
+                byteRange: '{$lang.user_name_limit}',
+                remote   : '{$lang.user_already_taken}'
+            },
+            password  : {
+                required : '{$lang.password_required}',
+                minlength: '{$lang.password_length_limit}'
+            },
+            password_confirm : {
+                required : '{$lang.password_confirm_please}',
+                equalTo  : '{$lang.password_inconsistent}'
+            },
+            email : {
+                required : '{$lang.email_required}',
+                email    : '{$lang.email_invalid}'
+            },
+            captcha : {
+                required : '{$lang.captcha_required}',
+                remote   : '{$lang.captcha_error}'
+            },
+            sms_vcode : {
+                required : '{$lang.sms_vcode_required}',
+                remote   : '{$lang.sms_vcode_error}'
+            },
+            agree : {
+                required : '{$lang.agree_required}'
+            }
+        }
+    });
+
+    var captchaSet = "{$captcha}";
+    var captchaDom = $(".captcha");
+    var smsDom = $("#sms");
+    $("#sms").hide();
+    if (captchaSet != 1) 
+        $(".captcha").hide();
+    $(".send_vcode").attr('disabled', null);
+    $("#user_name").blur(function(){
+        $(".email").after(smsDom).after(captchaDom);
+        if(is_mobile($(this).val())){
+            captchaDom.fadeIn("slow");
+            smsDom.fadeIn("slow");
+            $(".send_vcode").bind("click", send_click);
+        }else{
+            if (captchaSet != 1) {
+                captchaDom.remove();
+            }
+            smsDom.remove();
+        }
+    });
+    
+    $(".send_vcode").bind("click", send_click);
+   
+});
+function send_click(){
+    var sendVcode = $(".send_vcode");
+    var captcha = $('#captcha1').val();
+    var phone = $("#user_name").val();
+    if (captcha == '') {
+        alert('请输入验证码');
+        return;
+    }
+    if (!is_mobile(phone)) {
+        alert('请填写正确的手机号');
+        return;
+    }
+    $(this).attr('disabled', 'true');
+    $(this).val('发送中...');
+    $(this).css('background-color', '#d2d2d2');
+    $.ajax({
+        type : "POST",
+        url : 'index.php',
+        data : 'app=member&act=ajax_validate_sms&captcha1=' + captcha + '&phone=' + phone,
+        dataType:"json",
+        success:function(data){
+            if(data.done == 'succ'){
+                alert('验证码已发送，请查收');
+                time($(".send_vcode"));
+            }else{
+                sendVcode.attr('disabled', null);
+                sendVcode.val('重新发送');
+                alert(data.msg);
+            }
+        },
+        error: function(){
+            sendVcode.attr('disabled', null);
+            sendVcode.val('发送验证码');
+            alert('{$lang.sms_send_fail}');
+        }
+    });
+}
+/* 检测是否手机号 */
+function is_mobile(phone){
+    if (!phone) return false;
+    var reg = /^0?1((3|8)[0-9]|5[0-35-9]|4[57])\d{8}$/; // 验证规则 稍微宽泛一点 更大兼容后续
+    return reg.test(phone);
+}
+var wait = 120;
+function time(sv){
+    if (wait == 0) {
+        sv.attr('disabled', null);
+        sv.val('发送验证码');
+        wait = 120;
+        return;
+    } else {
+        sv.attr('disabled', 'true');
+        sv.val(wait + '秒重试')
+        wait-- ;
+
+    }
+    setTimeout(function(){
+        time(sv);
+    }, 1000);
+}
+</script>
+<div class="content">
+    <div class="module_common">
+        <h2><b class="register" title="JOIN US{$lang.user_register}"></b></h2>
+        <div class="wrap">
+            <div class="wrap_child">
+                <div class="login_con">
+                    <div class="login_fill_in">
+                        <form name="" id="register_form" method="post" action="">
+                        <table>
+                            <tr>
+                                <td colspan="3"><h4>{$lang.enter_register_info}</h4></td>
+                            </tr>
+                            <tr>
+                                <td>{$lang.user_name}:</td>
+                                <td><input type="text" id="user_name" name="user_name" class="text width10" /></td>
+                                <td class="padding3 fontColor4"><label class="field_notice">{$lang.user_name_desc}</label><label id="checking_user" class="checking">{$lang.checking}</label></td>
+                            </tr>
+                            <tr>
+                                <td>{$lang.password}:</td>
+                                <td><input type="password" id="password" name="password" class="text width10" /></td>
+                                <td class="padding3 fontColor4"><label class="field_notice">{$lang.password_desc}</label></td>
+                            </tr>
+                            <tr>
+                                <td>{$lang.password_confirm}:</td>
+                                <td><input type="password" name="password_confirm" class="text width10" /></td>
+                                <td class="padding3 fontColor4"><label class="field_notice">{$lang.password_confirm_desc}</label></td>
+                            </tr>
+                            <tr class="email">
+                                <td>{$lang.email}:</td>
+                                <td><input type="text" name="email" class="text width10" /></td>
+                                <td class="padding3 fontColor4"><label class="field_notice">{$lang.email_desc}</label></td>
+                            </tr>
+                            <tr class="captcha">
+                                <td>{$lang.captcha}:</td>
+                                <td>
+                                    <input type="text" name="captcha" class="text" id="captcha1" />
+                                    <a href="javascript:change_captcha($('#captcha'));" class="renewedly"><img id="captcha" src="index.php?app=captcha&amp;{$random_number}" /></a>
+                                </td>
+                                <td class="padding3 fontColor4"><label class="field_notice">{$lang.captcha_desc}</label></td>
+                            </tr>
+                            <tr id="sms">
+                                <td>{$lang.sms_vcode}:</td>
+                                <td class="sms_td"><input type="text" name="sms_vcode" class="text" id="sms_vcode" />
+                                <input type="button" name="send_vcode" class="btn send_vcode" value="{$lang.send_vcode}" /></td>
+                                <td class="padding3 fontColor4"><label class="field_notice">{$lang.sms_vcode_required}</label></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><input id="clause" type="checkbox" name="agree" value="1" /> <label for="clause">{$lang.i_have_read} <a href="{url app=article&act=system&code=eula}" target="_blank" class="agreement">{$lang.mall_eula}</a></label></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2"><input type="submit" name="Submit" value="" class="login_btn" title="{$lang.register_now}" /></td><input type="hidden" name="ret_url" value="{$ret_url}" />
+                            </tr>
+                        </table>
+                        </form>
+                    </div>
+
+                    <div class="login_right">
+                        <h4>{$lang.attention}:<br />{$lang.not_member}</h4>
+                        <p>{$lang.after_register}</p>
+                        <ol>
+                            <li><strong>1.</strong> {$lang.save_profile}</li>
+                            <li><strong>2.</strong> {$lang.collect_goods}</li>
+                            <!--<li><strong>3.</strong> {$lang.member_point}</li>-->
+                            <li><strong>3.</strong> {$lang.subscription_goods}</li>
+                        </ol>
+                        <h4>{$lang.already_have_account}</h4>
+                        <a href="{url app=member&act=login&ret_url=$ret_url}" class="enter" title="{$lang.login_now}"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{include file="footer.html"}

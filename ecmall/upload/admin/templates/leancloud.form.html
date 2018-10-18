@@ -1,0 +1,187 @@
+{include file="header.html"}
+<script type="text/javascript">
+$(function(){
+    $('#leancloud_form').validate({
+        errorPlacement: function(error, element){
+            $(element).next('.field_notice').hide();
+            $(element).after(error);
+        },
+        success       : function(label){
+            label.addClass('right').text('OK!');
+        },
+        onkeyup    : false,
+        rules : {
+            title : {
+                required : true
+            },
+            content : {
+                required : true,
+                rangelength: ['',500,'{$charset}']
+            },
+            platform : {
+                required : true
+            },
+            push_type : {
+                required : true
+            },
+        },
+        messages : {
+            title : {
+                required : '{$lang.title_empty}'
+            },
+            content  : {
+                required   : '{$lang.content_empty}',
+                rangelength: '{$lang.title_maxlength_error}'
+            },
+            platform : {
+                required : '{$lang.title_empty}'
+            },
+            push_type : {
+                required : '{$lang.push_type_empty}'
+            },
+        }
+    });
+
+    $(".push_at").hide();
+    $("#link_arg").hide();
+    $("#push_type").change(function(){
+        $(".push_at_notice").fadeOut("slow");
+        if ($(this).children('option:selected').val() == 2) {
+            $(".push_at").fadeIn("slow");
+        } else {
+            $(".push_at").fadeOut("slow");
+        }
+        
+    });
+    $("#link").change(function(){
+        $(".link_arg_notice").fadeOut("slow");
+        var select_var = $(this).children('option:selected').val();
+        var link_arg = $("#link_arg");
+        var link_type = $("#link_type");
+        link_arg.hide();
+        link_arg.val('');
+        if (select_var != 0 && select_var == 'user-defined') {
+            link_arg.attr("placeholder", "{$lang.input_user_defined}");
+            link_type.val('user_defined');
+            link_arg.fadeIn("slow");
+        } else if (select_var != 0 && select_var.indexOf("?k=关键字") > 0) {
+            link_arg.attr("placeholder", "{$lang.input_keywords}");
+            link_type.val('keywords');
+            link_arg.fadeIn("slow");
+        } else if (select_var != 0 && select_var.indexOf(":id") > 0) {
+            link_arg.attr("placeholder", "{$lang.input_id}");
+            link_type.val('id');
+            link_arg.fadeIn("slow");
+        }else {
+            link_arg.fadeOut("slow");
+            link_type.val('');
+        }
+    });
+    $('#leancloud_form').submit(function(e){
+        var pass = true;
+        if ($("#push_type").children('option:selected').val() == 2 && $("#push_at").val() == '') {
+            $("#push_at").after("<span class='push_at_notice'>{$lang.push_at_time_empty}</span>");
+            pass = false;
+        }
+        // if (($("#link_type").val().length != 0 && $("#link_arg").val().length == 0) || ($("#link_type").val() == 'user-defined' && testUrl($("#link_arg").val()) == false)) {
+        if ($("#link_type").val().length != 0 && $("#link_arg").val().length == 0) {
+            $("#link_arg").after("<span class='link_arg_notice'>{$lang.link_type_arg_empty}</span>");
+            pass = false;
+        }
+        if (pass === false) 
+            return false;
+    });
+
+    $("#push_at").focus(function(){
+        $(".push_at_notice").fadeOut("slow");
+    });
+
+    $("#link_arg").focus(function(){
+        $(".link_arg_notice").fadeOut("slow");
+    });
+
+    // var testUrl = function(s) {
+    //     var reg = "/^(news|telnet|nttp|file|http|ftp|https)://[-A-Za-z0-9\\.]+\\/?.*$/ig";  
+    //     var r = new RegExp(reg);  
+    //     if(!r.test(s)) {  
+    //         return false;  
+    //     } else {  
+    //         return true;  
+    //     }
+    // }
+
+});
+</script>
+<div id="rightTop">
+    <p>{$lang.leancloud_manage}</p>
+    <ul class="subnav">
+        <li><a class="btn1" href="index.php?app=leancloud">{$lang.manage}</a></li>
+        {if $leancloud.id}
+        <li><a class="btn1" href="index.php?app=leancloud&amp;act=add">{$lang.add}</a></li>
+        {else}
+        <li><span>{$lang.edit}</span></li>
+        {/if}
+    </ul>
+</div>
+
+<div class="info">
+    <form method="post" enctype="multipart/form-data" id="leancloud_form">
+        <table class="infoTable">
+            <tr>
+                <th class="paddingT15">
+                    {$lang.title}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput2" id="title" type="text" name="title" value="{$leancloud.title|escape}" /> <label class="field_notice">{$lang.title}</label>
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.content}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <textarea name="content" id="content" style="width: 300px; ">{$leancloud.content|escape}</textarea> <label class="field_notice">{$lang.content_notice}</label>
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.platform}:</th>
+                <td class="paddingT15 wordSpacing5">
+                <select name="platform" id="platform"><option value="">{$lang.select_pls}</option>
+                {html_options options=$platform selected=$leancloud.platform}</select>
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.push_type}:</th>
+                <td class="paddingT15 wordSpacing5">
+                <select name="push_type" id="push_type"><option value="">{$lang.select_pls}</option>
+                {html_options options=$push_type selected=$leancloud.push_type}</select>
+                </td>
+            </tr>
+            <tr class="push_at">
+                <th class="paddingT15">
+                    {$lang.push_at}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input type="datetime-local" name="push_at" id="push_at" value="{$leancloud.push_at}">
+                </td>
+            </tr>
+             <tr>
+                <th class="paddingT15">
+                    {$lang.link}:</th>
+                <td class="paddingT15 wordSpacing5">
+                <select name="link" id="link"><option value="">{$lang.select_pls}</option>
+                {html_options options=$link selected=$leancloud.link}</select>
+                <input type="text" name="link_arg" id="link_arg" placeholder="">
+                <input type="hidden" name="link_type" id="link_type" value="">
+                </td>
+            </tr>
+        <tr>
+            <th></th>
+            <td class="ptb20">
+                <input class="formbtn" type="submit" name="Submit" value="{$lang.submit}" />
+                <input class="formbtn" type="reset" name="Submit2" value="{$lang.reset}" />
+            </td>
+        </tr>
+        </table>
+    </form>
+</div>
+{include file="footer.html"}

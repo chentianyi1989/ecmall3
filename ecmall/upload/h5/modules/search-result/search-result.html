@@ -1,0 +1,160 @@
+<div class="app-container with-navbar" ng-controller="SearchResultController">
+
+  <div class="navbar fixed-top" ng-if="navStyle == 'default'">
+    <div class="navbar-left hide-weixin" ng-click="goBack()">
+      <img class="button-icon" ng-src="image/nav-left.png"/>
+      <div class="button-text">返回</div>
+    </div>
+    <div class="navbar-title">
+      {{navTitle || '搜索结果'}}
+    </div>
+  </div>
+
+  <!--<div class="navbar fixed-top" ng-if="navStyle == 'search'">-->
+    <!--<div class="search-inline">-->
+      <!--<img class="search-icon" ng-src="image/ind-search.png"/>-->
+      <!--<form ng-submit="touchSearch()">-->
+        <!--<input class="search-text" placeholder="请输入您要搜索的商品" ng-model="currentKeyword">-->
+      <!--</form>-->
+    <!--</div>-->
+    <!--<div class="search-cancel" ng-click="goBack()">取消</div>-->
+  <!--</div>-->
+
+  <!-- / 多店-->
+  <div class="navbar fixed-top">
+    <div class="search-inline">
+      <div class="search-title" ng-if="isB2B2C">
+        <dev ng-click="touchTypeChose()">
+          <span>{{isSearchGoods ? "商品" : "店铺"}}</span>
+          <img src="image/ind-arrow-down.png" alt=""/>
+        </dev>
+        <div class="hover-warp"  ng-if="showTypeChose" ng-click="hideTypeChose()">
+          <ul class="search-hover">
+            <li ng-click="choseType(1)">
+              <img src="image/b1_search_goods@2x.png" alt="" />
+              <span>商品</span>
+            </li>
+            <li ng-click="choseType(0)">
+              <img src="image/b1_search_store@2x.png" alt=""/>
+              <span>店铺</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <img class="search-icon" src="image/ind-search.png" ng-if="!isB2B2C"/>
+      <form ng-submit="touchSearch()" ng-class="{'form-control' : isB2B2C }">
+        <input class="search-text" ng-model="currentKeyword" placeholder="请输入您要搜索的商品"/>
+      </form>
+    </div>
+    <div class="search-cancel" ng-click="goBack()">取消</div>
+  </div>
+  <!-- / 多店-->
+
+  <div class="app-content" ng-if="!isSearchGoods" infinite-scroll="loadMoreShops()">
+    <div class="store-result store-result-tab">
+      <div class="header-common">
+        <div class="header-item" ng-class="{active: currentSortKey == ENUM.SORT_KEY.POPULAR}" ng-click="touchShopSortPopular()">
+          <span class="text">人气</span>
+        </div>
+
+        <div class="header-item" ng-class="{active: currentSortKey == ENUM.SORT_KEY.CREDIT}" ng-click="touchShopSortCredit()">
+          <span class="text">信用</span>
+        </div>
+      </div>
+      <div class="store-list"  ng-if="shops && shops.length">
+        <div class="list-item" ng-repeat="shop in shops track by $index" ng-click="touchShop(shop)">
+          <div class="item-photo">
+            <img src="shop.logo.large"/>
+          </div>
+          <div class="item-info">
+            <div class="info-next">
+              <img src="image/z@3x.png" alt=""/>
+            </div>
+            <div class="info-name">
+              <span>{{shop.name}}</span>
+            </div>
+            <div class="info-star" >
+              <div class="star-count"  >
+                <img src="image/e8_star @2x.png" alt="" ng-repeat="i in range(1, shop.credit) track by $index"/>
+              </div>
+            </div>
+            <div class="info-address">
+              <span>{{shop.address}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- / store-->
+    </div>
+    <div class="empty" ng-if="isShopsEmpty">
+      <div class="empty-item">
+        <img class="item-logo" ng-src="image/logo-product-empty.png"/>
+        <div class="item-text">暂无任何店铺</div>
+      </div>
+    </div>
+
+    <div class="loading-more" ng-if="isShopsLoaded && isShopsLoading">
+      正在加载...
+    </div>
+    <div class="loading-more" ng-if="isShopsLoaded && isShopsLastPage">
+      全部加载完毕
+    </div>
+  </div>
+
+  <div class="app-content" infinite-scroll='loadMoreProduct()' ng-if="isSearchGoods">
+    <div class="search-filter">
+      <div class="filter-item" ng-class="{active: currentSortKey == ENUM.SORT_KEY.DEFAULT}"
+           ng-click="touchSortDefault()">
+        <span class="text">综合</span>
+      </div>
+      <div class="filter-item" ng-class="{active: currentSortKey == ENUM.SORT_KEY.SALE}" ng-click="touchSortSale()">
+        <span class="text">销量</span>
+      </div>
+      <div class="filter-item" ng-class="{active: currentSortKey == ENUM.SORT_KEY.DATE}" ng-click="touchSortDate()">
+        <span class="text">新品</span>
+      </div>
+      <div class="filter-item" ng-class="{active: currentSortKey == ENUM.SORT_KEY.PRICE}" ng-click="touchSortPrice()">
+        <span class="text">价格</span>
+        <div class="arrow">
+          <img class="ind"
+               ng-class="{active : currentSortKey == ENUM.SORT_KEY.PRICE && (currentSortValue == ENUM.SORT_VALUE.DEFAULT || currentSortValue == ENUM.SORT_VALUE.ASC)}"
+               ng-src="image/ind-arrow-up.png"/>
+          <img class="ind"
+               ng-class="{active : currentSortKey == ENUM.SORT_KEY.PRICE && (currentSortValue == ENUM.SORT_VALUE.DESC)}"
+               ng-src="image/ind-arrow-down.png"/>
+        </div>
+      </div>
+      <div class="filter-item" ng-class="{active: currentSortKey == ENUM.SORT_KEY.CREDIT}" ng-click="touchSortCredit()">
+        <span class="text">信用</span>
+      </div>
+    </div>
+
+    <div class="search-product" ng-if="products && products.length">
+      <div class="product-item" ng-repeat="product in products track by $index" ng-click="touchProduct(product)">
+        <div class="item-photo">
+          <img ng-src="image/default-photo.png" lazy-img="{{product.default_photo.large}}"/>
+        </div>
+        <div class="item-name">{{product.name}}</div>
+        <div class="item-footer">
+          <div class="footer-sales">{{product.sales_count}}人付款</div>
+          <div class="footer-price">￥{{product.current_price|number:2}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty" ng-if="isProductsEmpty">
+      <div class="empty-item">
+        <img class="item-logo" ng-src="image/logo-product-empty.png"/>
+        <div class="item-text">暂无任何商品</div>
+      </div>
+    </div>
+
+    <div class="loading-more" ng-if="isProductsLoaded && isProductsLoading">
+      正在加载...
+    </div>
+    <div class="loading-more" ng-if="isProductsLoaded && isProductsLastPage">
+      全部加载完毕
+    </div>
+  </div>
+
+</div>

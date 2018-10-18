@@ -1,0 +1,26 @@
+{include file="header.html"}
+<style type="text/css">
+.mall-nav{ display:none}
+</style>
+<div id="main" class="w-full">
+<div id="page-cart" class="cart-empty w">
+   <div class="step step1 mt10 clearfix">
+      <span class="fs14 strong fff">{$lang.ckgwc}</span>
+      <span class="fs14 strong">{$lang.qrddxx}</span>
+      <span class="fs14 strong">{$lang.fk}</span>
+      <span class="fs14 strong">{$lang.qrsh}</span>
+      <span class="fs14 strong">{$lang.pj}</span>
+   </div>
+   <div class="empty-notice w clearfix">
+      <div class="empty-ico"></div>
+      <div class="empty-text">
+         <p class="fs14 strong">{$lang.cart_empty_notice}</p>
+         <a href="index.php">{$lang.choice_goods}>></a>
+         <a href="{url app=buyer_order}">{$lang.view_orders}>></a>
+      </div>
+   </div>
+   
+</div>
+</div>
+{include file=server.html}
+{include file="footer.html"}

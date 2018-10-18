@@ -1,0 +1,110 @@
+{include file="header.html"}
+<script type="text/javascript">
+$(function(){
+    $('#banner_form').validate({
+        errorPlacement: function(error, element){
+            $(element).next('.field_notice').hide();
+            $(element).after(error);
+        },
+        success       : function(label){
+            label.addClass('right').text('OK!');
+        },
+        onkeyup    : false,
+        rules : {
+            photo : {
+                accept  : 'gif|png|jpe?g'
+            },
+            sort_order : {
+                number   : true
+            },
+            link : {
+                url : true,
+                required : true
+            },
+        },
+        messages : {
+            photo : {
+                accept : '{$lang.limit_img}'
+            },
+            sort_order  : {
+                number   : '{$lang.number_only}'
+            },
+            link : {
+                url     : '{$lang.link_limit}',
+                required : '{$lang.link_empty}'
+            },
+        }
+    });
+});
+</script>
+<div id="rightTop">
+    <p>{$lang.banner_manage}</p>
+    <ul class="subnav">
+        <li><a class="btn1" href="index.php?app=banner">{$lang.manage}</a></li>
+        {if $banners.id}
+        <li><a class="btn1" href="index.php?app=banner&amp;act=add">{$lang.add}</a></li>
+        {else}
+        <li><span>{$lang.edit}</span></li>
+        {/if}
+    </ul>
+</div>
+
+<div class="info">
+    <form method="post" enctype="multipart/form-data" id="banner_form">
+        <table class="infoTable">
+            <tr>
+                <th class="paddingT15">
+                    {$lang.title}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput2" id="title" type="text" name="title" value="{$banners.title|escape}" /> <label class="field_notice">{$lang.title}</label>
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.link}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput2" id="link" type="text" name="link" value="{$banners.link|escape}" /> <label class="field_notice">{$lang.link}</label>
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.photo}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableFile2" id="banners_photo" type="file" name="photo" />
+                    <label class="field_notice">{$lang.limit_img}</label>
+                </td>
+            </tr>
+            {if $banners.photo}
+            <tr>
+                <th class="paddingT15">
+                </th>
+                <td class="paddingT15 wordSpacing5">
+                <img src="{$banners.photo}" class="makesmall" max_width="120" max_height="90" />
+                </td>
+            </tr>
+            {/if}
+            <tr>
+                <th class="paddingT15">
+                    {$lang.status}:</th>
+                <td class="paddingT15 wordSpacing5">
+                {html_radios options=$yes_or_no checked=$banners.status name=status}</td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.sort_order}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="sort_order" id="sort_order" type="text" name="sort_order" value="{$banners.sort_order}" />
+                    <label class="field_notice">{$lang.update_order}</label>
+                </td>
+            </tr>
+        <tr>
+            <th></th>
+            <td class="ptb20">
+                <input class="formbtn" type="submit" name="Submit" value="{$lang.submit}" />
+                <input class="formbtn" type="reset" name="Submit2" value="{$lang.reset}" />
+            </td>
+        </tr>
+        </table>
+    </form>
+</div>
+{include file="footer.html"}

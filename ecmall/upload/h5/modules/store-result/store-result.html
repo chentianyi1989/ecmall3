@@ -1,0 +1,105 @@
+<div class="container" ng-controller="StoreResultController">
+
+
+    <div class="navbar fixed-top">
+        <div class="search-inline">
+            <img class="search-icon" src="image/ind-search.png"/>
+            <form >
+                <input class="search-text" placeholder="请输入您要搜索的商品" >
+            </form>
+        </div>
+        <div class="search-cancel" ng-click="goBack()">取消</div>
+    </div>
+
+  <!-- / 多店-->
+  <div class="navbar fixed-top">
+    <div class="search-inline">
+      <div class="search-title">
+        <span>商品</span>
+        <img src="image/ind-arrow-down.png" alt=""/>
+        <div class="hover-warp">
+          <ul class="search-hover">
+            <li>
+              <img src="image/b1_search_goods@2x.png" alt=""/>
+              <span>商品</span>
+            </li>
+            <li>
+              <img src="image/b1_search_store@2x.png" alt=""/>
+              <span>店铺</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <form ng-submit="touchSearch()" class="form-control">
+        <input class="search-text" ng-model="currentKeyword" placeholder="请输入您要搜索的商品"/>
+      </form>
+    </div>
+    <div class="search-cancel" ng-click="goBack()">取消</div>
+  </div>
+  <!-- / 多店-->
+
+    <div class="app-content">
+        <div class="store-result">
+          <div class="header-common">
+            <div class="header-item item-color">人气</div>
+            <div class="header-item">信用</div>
+          </div>
+          <!--store-->
+          <div class="store-list" >
+              <div class="list-item" >
+                  <div class="item-photo" >
+                    <img src=""/>
+                  </div>
+                  <div class="item-info">
+                      <div class="info-next" >
+                          <img src="image/z@3x.png" alt=""/>
+                      </div>
+                      <div class="info-name">
+                          <span>优衣库官方旗舰店</span>
+                      </div>
+                      <div class="info-star" >
+                          <div class="star-count">
+                              <img src="image/e8_star @2x.png" alt=""/>
+                              <img src="image/e8_star @2x.png" alt=""/>
+                              <img src="image/e8_star @2x.png" alt=""/>
+                          </div>
+                      </div>
+                      <div class="info-address">
+                          <span>北京</span>
+                          <span>北京市</span>
+                          <span>海淀人民大街</span>
+                      </div>
+                </div>
+            </div>
+            <div class="list-item" >
+              <div class="item-photo" >
+                <img src=""/>
+              </div>
+              <div class="item-info">
+                <div class="info-next" >
+                  <img src="image/z@3x.png" alt=""/>
+                </div>
+                <div class="info-name">
+                  <span>优衣库官方旗舰店</span>
+                </div>
+                <div class="info-star" >
+                  <div class="star-count">
+                    <img src="image/e8_star @2x.png" alt=""/>
+                    <img src="image/e8_star @2x.png" alt=""/>
+                    <img src="image/e8_star @2x.png" alt=""/>
+                  </div>
+                </div>
+                <div class="info-address">
+                  <span>北京</span>
+                  <span>北京市</span>
+                  <span>海淀人民大街</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <!-- / store-->
+        </div>
+    </div>
+
+</div>

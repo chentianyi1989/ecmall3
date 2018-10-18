@@ -1,0 +1,30 @@
+{include file="header.html"}
+
+<div id="rightTop">
+    <p>{$lang.wap_recommend_setting_detail}</p>
+    <ul class="subnav">
+        <li><span>{$lang.manage}</span></li>
+    </ul>
+</div>
+
+<div class="info">
+    <form method="post" enctype="multipart/form-data">
+        <table class="infoTable">
+            <tr>
+                <th class="paddingT15">
+                    {$lang.wap_recommend_setting_detail}:</th>
+                <td class="paddingT15 wordSpacing5">
+                <select name="recom_id" id="recom_id"><option value="">{$lang.select_pls}</option>
+                {html_options options=$recommends selected=$recommends.recom_id}</select>
+                </td>
+            </tr>
+            <th></th>
+            <td class="ptb20">
+                <input class="formbtn" type="submit" name="Submit" value="{$lang.submit}" />
+                <input class="formbtn" type="reset" name="Submit2" value="{$lang.reset}" />
+            </td>
+        </tr>
+        </table>
+    </form>
+</div>
+{include file="footer.html"}

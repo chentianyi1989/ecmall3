@@ -1,0 +1,29 @@
+<div class="container" ng-controller="ShopCategoryController">
+
+     <div class="navbar fixed-top">
+        <div class="navbar-left hide-weixin" ng-click="goBack()">
+            <img class="button-icon" ng-src="image/nav-left.png"/>
+            <div class="button-text">返回</div>
+        </div>
+        <div class="navbar-title">
+                店铺分类
+        </div>
+     </div>
+
+     <div class="app-content">
+        <div class="category-side category-side-shop" ng-if="categories && categories.length">
+          <div class="side-item" ng-class="{active: selectedSide.id == item.id}" ng-repeat="item in categories track by $index" ng-click="touchSide(item)">
+            {{item.name}}
+          </div>
+        </div>
+        <div class="category-main category-main-shop" ng-if="categories && categories.length">
+          <div class="main-item" ng-click="touchMain()">
+            全部
+          </div>
+          <div class="main-item" ng-repeat="item in subCategories track by $index" ng-click="touchMain(item)">
+            {{item.name}}
+          </div>
+        </div>
+     </div>
+
+</div>

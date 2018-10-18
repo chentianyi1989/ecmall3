@@ -1,0 +1,85 @@
+{include file="header.html"}
+<script type="text/javascript">
+$(function(){
+    $('#pay_time_from').datepicker({dateFormat: 'yy-mm-dd'});
+    $('#pay_time_to').datepicker({dateFormat: 'yy-mm-dd'});
+});
+</script>
+<div id="rightTop">
+    <p>{$lang.proceeds_manage}</p>
+    <ul class="subnav">
+        <li><span>{$lang.manage}</span></li>
+        <!-- <li><a class="btn1" href="index.php?app=proceeds&amp;act=export">{$lang.export}</a></li> -->
+    </ul>
+</div>
+<div class="mrightTop">
+    <div class="fontl">
+        <form method="get">
+             <div class="left">
+                <input type="hidden" name="app" value="proceeds" />
+                <input type="hidden" name="act" value="index" />
+                <select class="querySelect" name="field">{html_options options=$search_options selected=$smarty.get.field}
+                </select>:<input class="queryInput" type="text" name="search_name" value="{$query.search_name|escape}" />
+                {$lang.pay_time_from}:<input class="queryInput2" type="text" value="{$query.pay_time_from}" id="pay_time_from" name="pay_time_from" class="pick_date" />
+                {$lang.pay_time_to}:<input class="queryInput2" type="text" value="{$query.pay_time_to}" id="pay_time_to" name="pay_time_to" class="pick_date" />
+                {$lang.money_from}:<input class="queryInput2" type="text" value="{$query.money_from}" name="money_from" />
+                {$lang.money_to}:<input class="queryInput2" type="text" style="width:60px;" value="{$query.money_to}" name="money_to" class="pick_date" />
+                <input type="submit" class="formbtn" value="{$lang.query}" />
+            </div>
+            <!--{if $filtered}-->
+            <a class="left formbtn1" href="index.php?app=proceeds">{$lang.cancel_query}</a>
+            <!--{/if}-->
+        </form>
+    </div>
+    <div class="fontr">
+        {if $proceeds}{include file=page.top.html}{/if}
+    </div>
+</div>
+<div class="tdare">
+    <table width="100%" cellspacing="0" class="dataTable">
+        <!--{if $proceeds}-->
+        <tr class="tatr1">
+            <td width="5%" class="firstCell"><input type="checkbox" class="checkall" /></td>
+            <td width="15%"><span ectype="order_by" fieldname="seller_id">{$lang.store_name}</span></td>
+            <td width="10%"><span ectype="order_by" fieldname="order_sn">{$lang.order_sn}</span></td>
+            <td width="15%"><span ectype="order_by" fieldname="pay_time">{$lang.pay_time}</span></td>
+            <td width="10%"><span ectype="order_by" fieldname="buyer_name">{$lang.buyer_name}</span></td>
+            <td width="10%"><span ectype="order_by" fieldname="money">{$lang.money}</span></td>
+            <td>{$lang.payment_name}</td>
+            <td width="10%"><span ectype="order_by" fieldname="pay_status">{$lang.proceeds_status}</span></td>
+            <!-- <td width="10%"><span ectype="order_by" fieldname="balance">{$lang.balance}</span></td> -->
+            <td>{$lang.type}</td>
+            <!-- <td width="15%">{$lang.pay_message}</td> -->
+        </tr>
+        <!--{/if}-->
+        <!--{foreach from=$proceeds item=proceed}-->
+        <tr class="tatr2">
+            <td class="firstCell"><input type="checkbox" class="checkitem" value="{$proceed.log_id}"/></td>
+            <td>{$proceed.seller_name|escape}</td>
+            <td>{$proceed.order_sn}</td>
+            <td>{$proceed.pay_time|date:complete}</td>
+            <td>{$proceed.buyer_name|escape}</td>
+            <td>{$proceed.money|price}</td>
+            <td>{$proceed.payment_name|escape|default:-}</td>
+            <td>{$proceed.pay_status|modifier:proceeds_status}</td>
+            <!-- <td>{$proceed.balance|price}</td> -->
+            <td>{$proceed.type|modifier:pay_type}</td>
+            <!-- <td>{$proceed.pay_message|escape|default:-}</td> -->
+        </tr>
+        <!--{foreachelse}-->
+        <tr class="no_data">
+            <td colspan="7">{$lang.no_data}</td>
+        </tr>
+        <!--{/foreach}-->
+    </table>
+    <div id="dataFuncs">
+        <div id="batchAction" class="left paddingT15">
+        <input class="formbtn batchButton" type="button" value="{$lang.export}" name="log_id" uri="index.php?app=proceeds&act=export&ret_page={$page_info.curr_page}"/>
+        </div>
+        <div class="pageLinks">
+            {if $proceeds}{include file=page.bottom.html}{/if}
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+{include file="footer.html"}

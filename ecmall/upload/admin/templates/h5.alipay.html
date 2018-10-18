@@ -1,0 +1,64 @@
+{include file="header.html"}
+<div id="rightTop">
+    <p>{$lang.h5}</p>
+    <ul class="subnav">
+        <li><a class="btn1" href="index.php?app=h5&amp;act=social">{$lang.social}</a></li>
+        <li><a class="btn1" href="index.php?app=h5&amp;act=wxpay">{$lang.wxpay}</a></li>
+        <li><span>{$lang.alipay}</span></li>
+    </ul>
+</div>
+
+<div class="info">
+    <form method="post">
+        <table class="infoTable">
+            <tr style="background-color: #F3F8F8; height: 40px;">
+                <th colspan="2" align="left" style="padding-left: 5px;">
+                    {$lang.alipay_instruction}</th>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.status}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    {html_radios name="status" options=$yes_or_no checked=$setting.status}
+                <!-- <span class="grey">{$lang.status}</span> -->
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.partner_id}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput" id="partner_id" type="text" name="partner_id" value="{$setting.partner_id}"/>
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.seller_id}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput" id="seller_id" type="text" name="seller_id" value="{$setting.seller_id}"/>
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.private_key}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput" id="private_key" type="text" name="private_key" value="{$setting.private_key}"/>
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    {$lang.public_key}:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput" id="public_key" type="text" name="public_key" value="{$setting.public_key}"/>
+                </td>
+            </tr>
+            <tr>
+            <th></th>
+            <td class="ptb20">
+                <input class="formbtn" type="submit" name="Submit" value="{$lang.submit}" />
+                <input class="formbtn" type="reset" name="Submit2" value="{$lang.reset}" />
+            </td>
+        </tr>
+        </table>
+    </form>
+</div>
+{include file="footer.html"}

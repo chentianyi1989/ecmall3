@@ -1,0 +1,74 @@
+<div class="app-container" ng-controller="ShopDetailsController">
+
+  <div class="app-content">
+      <div class="multi-store">
+          <!--banner-->
+          <div class="store-banner" ng-click="goBack()">
+              <img ng-src="" lazy-img="{{shop.banner.large}}"/>
+              <div class="banner-back">
+                <img src="image/nav-left.png" alt=""/>
+                返回
+              </div>
+          </div>
+          <div class="store-intro">
+              <div class="intro-photo">
+              	<img ng-src="image/b2_store_big.png" lazy-img="{{shop.logo.thumb}}"/>
+              </div>
+              <div class="intro-name">
+                  {{shop.name || '-'}}
+              </div>
+          </div>
+          <ul class="store-info">
+            <li>
+              <div class="info-title">店铺掌柜</div>
+              <div class="info-subtitle">{{shop.keeper.username || '-'}}</div>
+            </li>
+            <li>
+              <div class="info-title">店铺信用度</div>
+              <div class="info-subtitle start" ng-if="shop.credit == 5">
+                <img src="image/Star 1 Copy 3@2x.png" alt=""/>
+                <img src="image/Star 1 Copy 3@2x.png" alt=""/>
+                <img src="image/Star 1 Copy 3@2x.png" alt=""/>
+                <img src="image/Star 1 Copy 3@2x.png" alt=""/>
+                <img src="image/Star 1 Copy 3@2x.png" alt=""/>
+              </div>
+              <div class="info-subtitle start" ng-if="shop.credit == 4">
+                <img src="image/Star 1 Copy 3@2x.png" alt=""/>
+                <img src="image/Star 1 Copy 3@2x.png" alt=""/>
+                <img src="image/Star 1 Copy 3@2x.png" alt=""/>
+                <img src="image/Star 1 Copy 3@2x.png" alt=""/>
+              </div>
+              <div class="info-subtitle start" ng-if="shop.credit == 3">
+                <img src="image/Star 1 Copy 3@2x.png" alt=""/>
+                <img src="image/Star 1 Copy 3@2x.png" alt=""/>
+                <img src="image/Star 1 Copy 3@2x.png" alt=""/>
+              </div>
+              <div class="info-subtitle start" ng-if="shop.credit == 2">
+                <img src="image/Star 1 Copy 3@2x.png" alt=""/>
+                <img src="image/Star 1 Copy 3@2x.png" alt=""/>
+              </div>
+              <div class="info-subtitle start" ng-if="shop.credit == 1">
+                <img src="image/Star 1 Copy 3@2x.png" alt=""/>
+              </div>
+              <div class="info-subtitle start" ng-if="shop.credit == 0">
+              </div>
+            </li>
+            <li>
+              <div class="info-title">联系方式</div>
+              <div class="info-subtitle">{{shop.tel || '-'}}</div>
+            </li>
+            <li>
+              <div class="info-title">详细地址</div>
+              <div class="info-subtitle">{{shop.address || '-'}}</div>
+            </li>
+            <li>
+              <div class="info-title">店铺简介</div>
+              <div class="info-subtitle">{{shop.desc || '-'}}</div>
+            </li>
+          </ul>
+      </div>
+  </div>
+
+
+
+</div>

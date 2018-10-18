@@ -1,0 +1,62 @@
+<div class="container" ng-controller="MyCouponController">
+
+    <div class="navbar fixed-top">
+        <div class="navbar-left hide-weixin" ng-click="goProfile()">
+            <img class="button-icon" src="image/nav-left.png"/>
+            <div class="button-text">返回</div>
+        </div>
+        <div class="navbar-title">
+            我的优惠券
+        </div>
+        <div class="navbar-right">
+        </div>
+    </div>
+
+    <div class="app-content coupon-content" infinite-scroll='myCouponModel.loadMore()'>
+
+        <div class="coupon-filter ">
+            <div class="filter-item" ng-class="{active: currentTab == AVAILABLE}" ng-click="touchTabAvailable()">
+              <span class="text">未过期</span>
+            </div>
+            <div class="filter-item" ng-class="{active: currentTab == EXPIRED}" ng-click="touchTabExpired()">
+              <span class="text">已过期</span>
+            </div>
+            <div class="filter-item" ng-class="{active: currentTab == USED}" ng-click="touchTabUsed()">
+              <span class="text">已使用</span>
+            </div>
+        </div>
+
+        <!-- Coupon -->
+        <div class="coupon-list" ng-repeat="coupon in myCouponModel.coupons track by $index">
+              <div class="list-item used">
+                  <div class="item-info">
+                      <div class="info-name">{{coupon.name || '-'}}</div>
+                    <!--已经使用、已经过期之后添加 used-->
+                      <div class="info-condition">满{{coupon.condition || '-'}}元可使用</div>
+                      <div class="info-status">{{coupon.statusStrig}}</div>
+                  </div>
+                  <div class="item-date">
+                  	  <div class="date-text">{{coupon.start_at}} ~ {{coupon.end_at}}</div>
+                  	  <div ng-repeat="couponString in coupon.infos track by $index">
+                  	  	<div class="number-text">{{couponString}}</div>
+                  	  </div>
+                  </div>
+              </div>
+        </div>
+
+		<div class="empty" ng-if="myCouponModel.isEmpty">
+			<div class="empty-item">
+			  <img class="item-logo" ng-src="image/bg@2x.png"/>
+			  <div class="item-text">你暂时没有可以使用的优惠券</div>
+			</div>
+		</div>
+
+        <div class="loading-more" ng-if="myCouponModel.isLoaded && myCouponModel.isLoading">
+            正在加载...
+        </div>
+        <div class="loading-more" ng-if="myCouponModel.isLoaded && myCouponModel.isLastPage">
+            全部加载完毕
+        </div>
+	</div>
+  </div>
+</div>

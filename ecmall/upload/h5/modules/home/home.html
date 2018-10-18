@@ -1,0 +1,210 @@
+<div class="app-container with-navbar with-tabbar" ng-controller="HomeController">
+  <div class="navbar fixed-top">
+    <div class="search" ng-click="touchSearch()">
+      <img class="search-icon" ng-src="image/ind-search.png" />
+      <span class="search-text">{{isB2B2C?"请输入您要搜索的商品" : "请输入您要搜索的商品/店铺"}}</span>
+    </div>
+  </div>
+  <div class="app-content" infinite-scroll='loadMoreProduct()'>
+    <!-- Banner -->
+    <div class="home-banner swiper-container" ng-if="banners && banners.length">
+      <div class="swiper-wrapper">
+        <div class="banner-slide swiper-slide" ng-repeat="banner in banners track by $index" ng-click="touchBanner(banner)">
+          <img ng-src="{{banner.photo.large || 'image/default-photo.png'}}" class="slide-image" />
+        </div>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+    <!-- Menu -->
+    <!-- <div class="home-menu" ng-if="banners && banners.length">
+            <div class="menu-item" ng-click="goCategory()">
+                <img class="item-icon" ng-src="image/home-category.png"/>
+                <div class="item-text">分类</div>
+            </div>
+            <div class="menu-item" ng-click="goMyOrder()">
+                <img class="item-icon" ng-src="image/home-order.png"/>
+                <div class="item-text">订单</div>
+            </div>
+            <div class="menu-item" ng-click="goMyFavorite()">
+                <img class="item-icon" ng-src="image/home-favorite.png"/>
+                <div class="item-text">收藏</div>
+            </div>
+            <div class="menu-item" ng-click="goCart()">
+                <img class="item-icon" ng-src="image/home-cart.png"/>
+                <div class="item-text">购物车</div>
+            </div>
+        </div> -->
+    <!-- Notice -->
+    <!-- <div class="home-notice" ng-if="notices && notices.length">
+            <img class="notice-icon" ng-src="image/home-notice.png"/>
+            <div class="notice-vline"></div>
+            <div class="notice-slide swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" ng-repeat="notice in notices track by $index" ng-click="touchNotice(notice)">
+                        {{notice.title}}
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    <!-- Editor Choices -->
+    <!--<div ng-if="!isB2B2C">
+    <div class="home-product" ng-if="editorChoice && editorChoice.length">
+      <div class="product-header" ng-click="touchEditorChoice()">
+        <!-- <img class="header-arrow" ng-src="image/nav-right.png"/>
+          <div class="header-title">精品推荐</div>
+        </div>
+        <div class="product-item" ng-repeat="product in editorChoice track by $index" ng-click="touchProduct(product)">
+          <div class="item-photo">
+            <img ng-src="image/default-photo.png" lazy-img="{{product.photos[0].large}}" />
+          </div>
+          <div class="item-name">{{product.name || '-'}}</div>
+          <div class="item-price">￥{{product.current_price || '0.00'}}</div>
+        </div>
+      </div>
+      <!-- New arrival
+      <div class="home-product" ng-if="newArrival && newArrival.length">
+        <div class="product-header" ng-click="touchNewArrival()">
+          <!-- <img class="header-arrow" ng-src="image/nav-right.png"/>
+          <div class="header-title">新品上架</div>
+        </div>
+        <div class="product-item" ng-repeat="product in newArrival track by $index" ng-click="touchProduct(product)">
+          <div class="item-photo">
+            <img ng-src="image/default-photo.png" lazy-img="{{product.photos[0].large}}" />
+          </div>
+          <div class="item-name">{{product.name || '-'}}</div>
+          <div class="item-price">￥{{product.current_price || '0.00'}}</div>
+        </div>
+      </div>
+      <!-- Top sale
+      <div class="home-product" ng-if="topSale && topSale.length">
+        <div class="product-header" ng-click="touchTopSale()">
+          <!-- <img class="header-arrow" ng-src="image/nav-right.png"/>
+          <div class="header-title">销量排行</div>
+        </div>
+        <div class="product-item" ng-repeat="product in topSale track by $index" ng-click="touchProduct(product)">
+          <div class="item-photo">
+            <img ng-src="image/default-photo.png" lazy-img="{{product.photos[0].large}}" />
+          </div>
+          <div class="item-name">{{product.name || '-'}}</div>
+          <div class="item-price">￥{{product.current_price || '0.00'}}</div>
+        </div>
+      </div>
+    </div>-->
+    <!--多店展示-->
+    <!-- 推荐店铺 -->
+    <div class="recommended-shops" ng-if="recommendShops && recommendShops.length">
+      <div class="common-header" ng-click="touchShopList()">
+        推荐店铺
+        <img class="header-arrow" src="image/more@2x.png" />
+      </div>
+      <div class="shops-content" ng-repeat="recommendShop in recommendShops track by $index">
+        <div class="content-item" ng-click="touchShop(recommendShop)">
+          <div class="item-img">
+            <img ng-src="image/default-photo.png" lazy-img="{{recommendShop.logo.large}}" />
+          </div>
+          <div class="item-title">
+            {{recommendShop.name}}
+          </div>
+          <div class="item-star">
+            <div class="star-gray">
+              <img ng-repeat="i in range(1,5)" src="image/star_gray@2x.png" alt="">
+            </div>
+            <div class="star-gold">
+              <img ng-repeat="i in range(1,recommendShop.credit)" src="image/star_gold@2x.png" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Recommended Brands-->
+    <div class="recommended-brands" ng-if="recommendBrands && recommendBrands.length">
+      <div class="common-header" ng-click="touchBarndList()">
+        推荐品牌
+        <img class="header-arrow" src="image/more@2x.png" />
+      </div>
+      <div class="brands-content" ng-repeat="recommendBrand in recommendBrands track by $index">
+        <div class="content-item" ng-click="touchBrand(recommendBrand)">
+          <img ng-src="image/default-photo.png" lazy-img="{{recommendBrand.logo.large}}" />
+        </div>
+      </div>
+    </div>
+    <!--Recommend-->
+    <div ng-if="isB2B2C">
+      <div class="home-product" ng-if="recommendProducts && recommendProducts.length">
+        <div class="common-header">
+          <img class="header-left" src="image/decorate_lift@2x.png" />
+          推荐商品
+          <img class="header-right" src="image/decorate_right@2x.png" />
+        </div>
+        <div class="product-item" ng-repeat="product in recommendProducts track by $index" ng-click="touchProduct(product)">
+          <div class="item-photo">
+            <img ng-src="image/default-photo.png" lazy-img="{{product.photos[0].large}}" />
+          </div>
+          <div class="item-name">{{product.name || '-'}}</div>
+          <div class="item-price">￥{{product.current_price || '0.00'}}</div>
+          <div class="item-other">
+            <p class="other-comment">
+              {{product.comment_count}}人评论
+            </p>
+            <p class="other-rate">
+              {{product.review_rate}}好评
+            </p>
+          </div>
+        </div>
+      </div>
+      <!--Product Categories-->
+      <!-- <div class="product-categories" ng-if="categories && categories.length">
+        <div class="common-header" ng-click="goCategory()">
+          <img class="header-arrow" src="image/nav-right.png" />
+          <div class="header-title">商品分类</div>
+        </div>
+        <div class="categories-content" ng-repeat="category in categories track by $index">
+          <div class="content-item" ng-click="touchCategory(category)">
+            <img ng-src="image/default-photo.png" lazy-img="{{category.photo.large}}" />
+            <div class="item-mask">￥{{category.name || '-'}}</div>
+          </div>
+        </div>
+      </div> -->
+      <!-- Sale Ranking-->
+
+      <!-- <div class="sale-ranking" ng-if="topSale && topSale.length">
+        <div class="common-header">
+          <img class="header-arrow" src="image/nav-right.png"/>
+          <div class="header-title" ng-click="goShopDetails()">销售排行</div>
+        </div>
+        <div class="ranking-content" ng-repeat="product in topSale track by $index" ng-click="touchProduct(product)">
+          <div class="ranking-item">
+            <div class="item-photo">
+              <img ng-src="image/default-photo.png" lazy-img="{{product.photos[0].large}}" />
+            </div>
+            <div class="item-intro">
+              <div class="intro-title">{{product.name || '-'}}</div>
+              <div class="intro-price">￥{{product.current_price || '0.00'}}</div>
+              <div class="intro-volume">
+                <span>{{product.review_rate || '0%'}}好评</span>
+                <span>销量{{product.sales_count || '0'}}笔</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+    </div>
+  </div>
+  <div class="tabbar fixed-bottom">
+    <div class="tab active" ng-click="goHome()">
+      <img class="tab-icon" ng-src="image/tab-home-active.png" />
+    </div>
+    <div class="tab" ng-click="goCategory()">
+      <img class="tab-icon" ng-src="image/tab-category-normal.png" />
+    </div>
+    <div class="tab" ng-click="goCart()">
+      <img class="tab-icon" ng-src="image/tab-cart-normal.png" />
+      <div class="tab-badge" ng-if="cartModel.total > 0">
+        {{cartModel.totlaNum}}
+      </div>
+    </div>
+    <div class="tab" ng-click="goProfile()">
+      <img class="tab-icon" ng-src="image/tab-profile-normal.png" />
+    </div>
+  </div>
+</div>
